@@ -56,19 +56,24 @@ async function fetchHolders() {
   const raw = await res.json();
   console.log("RAW HOLDERS RESPONSE:", JSON.stringify(raw).slice(0, 500));
 
- const list = raw.holders
-          ?? raw.accounts
-          ?? raw.items
-          ?? raw.wallets
-          ?? raw.data?.holders
-          ?? raw.data?.items
-          ?? (Array.isArray(raw) ? raw : null);
+  const list = raw.holders
+            ?? raw.accounts
+            ?? raw.items
+            ?? raw.wallets
+            ?? raw.data?.holders
+            ?? raw.data?.items
+            ?? (Array.isArray(raw) ? raw : null);
 
   if (!list || list.length === 0) return [];
 
-  return list.map(h =>
-    typeof h === "string" ? h : h.address || h.owner || h.wallet || h.pubkey || null
-  ).filter(Boolean);
+  // Return full objects so we can access percentage later
+  return list.map(h => {
+    if (typeof h === "string") return { wallet: h, percentage: 0 };
+    return {
+      wallet:     h.address || h.owner || h.wallet || h.pubkey || null,
+      percentage: h.percentage ?? 0,
+    };
+  }).filter(h => h.wallet !== null);
 }
 
 async function sendSOL(to, lamports) {
@@ -113,6 +118,7 @@ async function bumpTimestamp(potSOL) {
 
 // ─── MAIN ──────────────────────────────────────────────────────────────────
 let roundCounter = 0;
+const recentWinners = []; // stores last 3 winners — they sit out
 
 async function distribute() {
   const thisRound = ++roundCounter;
@@ -134,8 +140,8 @@ async function distribute() {
     }
 
     log("   Fetching holders...");
-await new Promise(r => setTimeout(r, 2000));
-const holders = await fetchHolders();
+    await new Promise(r => setTimeout(r, 2000));
+    const holders = await fetchHolders();
 
     if (!holders || holders.length === 0) {
       log("   ⚠️  No holders found");
@@ -144,9 +150,25 @@ const holders = await fetchHolders();
     }
     log(`   Holders: ${holders.length}`);
 
-    const idx    = Math.floor(Math.random() * holders.length);
-    const winner = holders[idx];
-    log(`   🎲 Winner: ${winner} (${idx + 1} of ${holders.length})`);
+    // Filter out: >4% holders (bonding curve, programs) + last 3 winners
+    const eligible = holders.filter(h => {
+      if (h.percentage > 4) return false;
+      if (recentWinners.includes(h.wallet)) return false;
+      return true;
+    });
+
+    log(`   Eligible: ${eligible.length} (after 4% filter + cooldown)`);
+
+    // Fallback to all holders if filters wipe everyone out
+    const pool   = eligible.length > 0 ? eligible : holders;
+    const picked = pool[Math.floor(Math.random() * pool.length)];
+    const winner = picked.wallet;
+
+    // Track last 3 winners
+    recentWinners.push(winner);
+    if (recentWinners.length > 3) recentWinners.shift();
+
+    log(`   🎲 Winner: ${winner} (${pool.indexOf(picked) + 1} of ${pool.length})`);
 
     log(`   Sending ◎${sendAmt.toFixed(6)}...`);
     const txSig = await sendSOL(winner, sendLam);
