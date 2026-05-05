@@ -134,7 +134,8 @@ async function distribute() {
     }
 
     log("   Fetching holders...");
-    const holders = await fetchHolders();
+await new Promise(r => setTimeout(r, 2000));
+const holders = await fetchHolders();
 
     if (!holders || holders.length === 0) {
       log("   ⚠️  No holders found");
