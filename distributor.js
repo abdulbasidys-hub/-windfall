@@ -167,4 +167,4 @@ const holders = await fetchHolders();
 // ─── START ─────────────────────────────────────────────────────────────────
 console.log(`\n  $WINDFALL Engine\n  Wallet: ${CREATOR_WALLET}\n  Token:  ${TOKEN_CA}\n`);
 distribute();
-cron.schedule("*/1 * * * *", distribute);
+cron.schedule("*/5 * * * *", distribute);

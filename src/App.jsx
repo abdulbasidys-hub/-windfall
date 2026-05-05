@@ -16,7 +16,7 @@ const CREATOR_WALLET  = "DSf8dVXjLbnCmEHbNfEATd37486Pe5m8o1nHNQZGgEd1";
 const ST_API_KEY      = import.meta.env.VITE_TRACKER_CODE;
 const X_URL           = "https://x.com/REPLACE_YOUR_HANDLE";   // ← update
 const COMMUNITY_URL   = "https://x.com/i/communities/REPLACE"; // ← update
-const DISTRIBUTION_MS = 1 * 60 * 1000;
+const DISTRIBUTION_MS = 5 * 60 * 1000;
 
 // ─── FIREBASE ──────────────────────────────────────────────────────────────
 const firebaseConfig = {
