@@ -14,8 +14,8 @@ import {
 const TOKEN_CA        = "13SVgpzFcZf8vF6Tg1QV7vec82FdJrf4Kg2VEX4xpump";
 const CREATOR_WALLET  = "DSf8dVXjLbnCmEHbNfEATd37486Pe5m8o1nHNQZGgEd1";
 const ST_API_KEY      = import.meta.env.VITE_TRACKER_CODE;
-const X_URL           = "https://x.com/REPLACE_YOUR_HANDLE";   // ← update
-const COMMUNITY_URL   = "https://x.com/i/communities/REPLACE"; // ← update
+const X_URL           = "https://x.com/windfall_sol?s=21";   // ← update
+const COMMUNITY_URL   = "https://x.com/windfall_sol?s=21"; // ← update
 const DISTRIBUTION_MS = 5 * 60 * 1000;
 
 // ─── FIREBASE ──────────────────────────────────────────────────────────────
@@ -276,7 +276,7 @@ export default function App() {
             WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent",
             marginBottom:24,
           }}>
-            MAY THE<br />$WINDFALL<br />BE ON YOU
+            MAY THE<br />$WINDFALL<br /> ON YOU
           </h1>
           <p style={{ color:"var(--muted)", fontSize:15, maxWidth:420, margin:"0 auto", lineHeight:1.7 }}>
             Every 5 minutes, one random holder receives all accumulated creator fees.
