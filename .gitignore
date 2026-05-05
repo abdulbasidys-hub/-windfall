@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.env
+distributor.env
+serviceAccount.json
+.DS_Store
