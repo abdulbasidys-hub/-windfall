@@ -174,10 +174,11 @@ export default function App() {
 
   // Firestore: global stats + countdown anchor
   useEffect(() => {
-    return onSnapshot(doc(db, "windfall_stats", "global"), (snap) => {
+   return onSnapshot(doc(db, "windfall_stats", "global"), (snap) => {
       if (!snap.exists()) return;
       const d = snap.data();
       setStats(d);
+      if (d.currentPotSOL !== undefined) setPotSOL(d.currentPotSOL);
       if (d.lastDistribution) {
         const nextMs = d.lastDistribution.toMillis() + DISTRIBUTION_MS;
         nextDistRef.current = nextMs;
