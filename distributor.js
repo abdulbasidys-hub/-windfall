@@ -53,23 +53,27 @@ async function getBalanceLamports() {
 }
 
 async function fetchHolders() {
-  let all = [], page = 1;
-  while (true) {
-    const res = await fetch(
-      `https://data.solanatracker.io/tokens/${TOKEN_CA}/holders?page=${page}&limit=100`,
-      { headers: { "x-api-key": ST_API_KEY } }
-    );
-    if (!res.ok) throw new Error(`SolanaTracker ${res.status}: ${await res.text()}`);
-    const data    = await res.json();
-    const holders = data.holders || data;
-    if (!Array.isArray(holders) || holders.length === 0) break;
-    all = all.concat(
-      holders.map(h => typeof h === "string" ? h : h.address || h.owner || h.wallet || null).filter(Boolean)
-    );
-    if (holders.length < 100 || all.length >= 1000) break;
-    page++;
-  }
-  return all;
+  const res = await fetch(
+    https://data.solanatracker.io/tokens/${TOKEN_CA}/holders?page=1&limit=100,
+    { headers: { "x-api-key": ST_API_KEY } }
+  );
+
+  const raw = await res.json();
+  console.log("RAW HOLDERS RESPONSE:", JSON.stringify(raw).slice(0, 500));
+
+  // Handle every known response shape
+  const holders = raw.holders
+                ?? raw.items
+                ?? raw.wallets
+                ?? raw.data?.holders
+                ?? raw.data?.items
+                ?? (Array.isArray(raw) ? raw : null);
+
+  if (!holders || holders.length === 0) return [];
+
+  return holders.map(h =>
+    typeof h === "string" ? h : h.address  h.owner  h.wallet  h.pubkey  null
+  ).filter(Boolean);
 }
 
 async function sendSOL(to, lamports) {
