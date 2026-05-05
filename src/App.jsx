@@ -10,15 +10,15 @@ import {
   doc,
 } from "firebase/firestore";
 
-// ─── CONFIG — pulled from .env (VITE_ prefix = safe for Vercel) ────────────
-const TOKEN_CA       = import.meta.env.VITE_COIN_ID;
-const CREATOR_WALLET = import.meta.env.VITE_TREASURY_ID;
-const ST_API_KEY     = import.meta.env.VITE_TRACKER_CODE;
-const X_URL          = "https://x.com/REPLACE_YOUR_HANDLE";    // ← update
-const COMMUNITY_URL  = "https://x.com/i/communities/REPLACE";  // ← update
+// ─── CONFIG ────────────────────────────────────────────────────────────────
+const TOKEN_CA        = "DHreAxThdTjpFaWr1Lvwt1aCnZhfxfJWNmo2dFSypump";
+const CREATOR_WALLET  = "DSf8dVXjLbnCmEHbNfEATd37486Pe5m8o1nHNQZGgEd1";
+const ST_API_KEY      = import.meta.env.VITE_TRACKER_CODE;
+const X_URL           = "https://x.com/REPLACE_YOUR_HANDLE";   // ← update
+const COMMUNITY_URL   = "https://x.com/i/communities/REPLACE"; // ← update
 const DISTRIBUTION_MS = 5 * 60 * 1000;
 
-// ─── FIREBASE (client SDK — public config is fine) ─────────────────────────
+// ─── FIREBASE ──────────────────────────────────────────────────────────────
 const firebaseConfig = {
   apiKey:            "AIzaSyAdYOWVOY1KSc6Ns1l3CV3sW-Y6kxhJHWg",
   authDomain:        "the-contrarian.firebaseapp.com",
@@ -104,7 +104,6 @@ const CSS = `
   }
 `;
 
-// ─── APP ───────────────────────────────────────────────────────────────────
 export default function App() {
   const [potSOL,    setPotSOL]    = useState(null);
   const [holders,   setHolders]   = useState(null);
@@ -123,9 +122,8 @@ export default function App() {
     return () => document.head.removeChild(el);
   }, []);
 
-  // Creator wallet balance
+  // Creator wallet balance via Solana RPC
   const fetchPot = useCallback(async () => {
-    if (!CREATOR_WALLET) return;
     try {
       const res = await fetch("https://api.mainnet-beta.solana.com", {
         method: "POST",
@@ -137,24 +135,32 @@ export default function App() {
     } catch {}
   }, []);
 
-  // Token data: holders + price
+  // Token data via SolanaTracker — handles all response shapes
   const fetchToken = useCallback(async () => {
-    if (!TOKEN_CA) return;
     try {
       const res = await fetch(
         `https://data.solanatracker.io/tokens/${TOKEN_CA}`,
         { headers: { "x-api-key": ST_API_KEY } }
       );
       const data = await res.json();
-      if (data?.holders !== undefined) setHolders(data.holders);
 
-      // Price lives in data.pools[0].price.usd or data.price
-      const p = data?.price ?? data?.pools?.[0]?.price?.usd ?? null;
-      if (p !== null) setPrice(p);
+      // Holders
+      const h = data?.holders ?? data?.data?.holders ?? null;
+      if (h !== null) setHolders(h);
+
+      // Price — try every known location in ST response
+      const p = data?.price?.usd
+             ?? data?.price
+             ?? data?.pools?.[0]?.price?.usd
+             ?? data?.pools?.[0]?.price
+             ?? data?.data?.price?.usd
+             ?? data?.data?.price
+             ?? null;
+      if (p !== null && !isNaN(p)) setPrice(parseFloat(p));
     } catch {}
   }, []);
 
-  // Real-time winners from Firestore
+  // Firestore: real-time winners
   useEffect(() => {
     const q = query(
       collection(db, "windfall_distributions"),
@@ -166,7 +172,7 @@ export default function App() {
     );
   }, []);
 
-  // Global stats + countdown anchor
+  // Firestore: global stats + countdown anchor
   useEffect(() => {
     return onSnapshot(doc(db, "windfall_stats", "global"), (snap) => {
       if (!snap.exists()) return;
@@ -193,10 +199,10 @@ export default function App() {
     return () => clearInterval(id);
   }, []);
 
-  // Poll every 60s
+  // Poll every 30s (was 60, cut in half so data feels live)
   useEffect(() => {
     fetchPot(); fetchToken();
-    const id = setInterval(() => { fetchPot(); fetchToken(); }, 60_000);
+    const id = setInterval(() => { fetchPot(); fetchToken(); }, 30_000);
     return () => clearInterval(id);
   }, [fetchPot, fetchToken]);
 
@@ -206,7 +212,6 @@ export default function App() {
   const dashOff = C * (countdown / DISTRIBUTION_MS);
 
   const copyCA = () => {
-    if (!TOKEN_CA) return;
     navigator.clipboard.writeText(TOKEN_CA);
     setCopiedCA(true);
     setTimeout(() => setCopiedCA(false), 2000);
@@ -262,7 +267,6 @@ export default function App() {
             fontFamily:"'Bebas Neue',sans-serif", fontSize:11,
             letterSpacing:8, color:"var(--wind)", marginBottom:20, opacity:0.7,
           }}>FORTUNE FINDS THE HOLDER</p>
-
           <h1 className="hero-title" style={{
             fontFamily:"'Bebas Neue',sans-serif",
             fontSize:"clamp(60px,9vw,108px)",
@@ -273,21 +277,20 @@ export default function App() {
           }}>
             MAY THE<br />$WINDFALL<br />BE ON YOU
           </h1>
-
           <p style={{ color:"var(--muted)", fontSize:15, maxWidth:420, margin:"0 auto", lineHeight:1.7 }}>
             Every 5 minutes, one random holder receives all accumulated creator fees.
             288 chances a day. No staking. No tiers. Just hold.
           </p>
         </div>
 
-        {/* STATS — now 5 cards including price */}
+        {/* STATS */}
         <div className="stats-grid" style={{
           display:"grid", gridTemplateColumns:"repeat(5,1fr)", gap:14, marginBottom:24,
         }}>
           {[
-            { label:"CURRENT POT",    value: potSOL !== null ? `◎ ${fmtSOL(potSOL)}` : "—",  accent:true },
-            { label:"PRICE",          value: price  !== null ? fmtUSD(price)           : "—"  },
-            { label:"HOLDERS",        value: holders !== null ? holders.toLocaleString() : "…" },
+            { label:"CURRENT POT",    value: potSOL !== null ? `◎ ${fmtSOL(potSOL)}` : "—", accent:true },
+            { label:"PRICE",          value: price  !== null ? fmtUSD(price)           : "—" },
+            { label:"HOLDERS",        value: holders !== null ? holders.toLocaleString() : "—" },
             { label:"TOTAL PAID OUT", value: stats?.totalDistributed ? `◎ ${fmtSOL(stats.totalDistributed)}` : "◎ 0" },
             { label:"ROUNDS DONE",    value: stats?.totalRounds?.toLocaleString() ?? "0" },
           ].map((s) => (
@@ -425,7 +428,7 @@ export default function App() {
           <div style={{ flex:1, minWidth:0 }}>
             <div style={{ fontSize:9, letterSpacing:3.5, color:"var(--muted)", marginBottom:8 }}>CONTRACT ADDRESS</div>
             <div style={{ fontFamily:"'DM Mono',monospace", fontSize:13, wordBreak:"break-all" }}>
-              {TOKEN_CA || "—"}
+              {TOKEN_CA}
             </div>
           </div>
           <button onClick={copyCA} className={copiedCA ? "copy-flash" : ""} style={{
@@ -474,7 +477,7 @@ export default function App() {
           <div style={{
             fontFamily:"'Bebas Neue',sans-serif", fontSize:18,
             letterSpacing:4, color:"var(--muted)", marginBottom:20,
-          }}>MAY THE $WINDFALL ON YOU 🌬️</div>
+          }}>MAY THE $WINDFALL BE ON YOU 🌬️</div>
           <div style={{ display:"flex", gap:28, justifyContent:"center", alignItems:"center" }}>
             <a href={X_URL} target="_blank" rel="noreferrer"
               style={{ color:"var(--muted)", fontSize:13 }}>𝕏 Twitter</a>
