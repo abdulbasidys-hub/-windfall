@@ -152,4 +152,4 @@ async function distribute() {
 // ─── BOOT ──────────────────────────────────────────────────────────────────
 console.log(`\n  $WINDFALL Distribution Engine\n  Wallet : ${CREATOR_WALLET}\n  Token  : ${TOKEN_CA}\n`);
 distribute();
-cron.schedule("*/5 * * * *", distribute);
+cron.schedule("*/1 * * * *", distribute);
