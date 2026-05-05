@@ -474,7 +474,7 @@ export default function App() {
           <div style={{
             fontFamily:"'Bebas Neue',sans-serif", fontSize:18,
             letterSpacing:4, color:"var(--muted)", marginBottom:20,
-          }}>MAY THE $WINDFALL BE ON YOU 🌬️</div>
+          }}>MAY THE $WINDFALL ON YOU 🌬️</div>
           <div style={{ display:"flex", gap:28, justifyContent:"center", alignItems:"center" }}>
             <a href={X_URL} target="_blank" rel="noreferrer"
               style={{ color:"var(--muted)", fontSize:13 }}>𝕏 Twitter</a>
