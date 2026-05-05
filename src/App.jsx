@@ -11,7 +11,7 @@ import {
 } from "firebase/firestore";
 
 // ─── CONFIG ────────────────────────────────────────────────────────────────
-const TOKEN_CA        = "FyKukDrSyFH8byBiV7Z7vq5d9V6XHNpXsSqhCx9spump";
+const TOKEN_CA        = "13SVgpzFcZf8vF6Tg1QV7vec82FdJrf4Kg2VEX4xpump";
 const CREATOR_WALLET  = "DSf8dVXjLbnCmEHbNfEATd37486Pe5m8o1nHNQZGgEd1";
 const ST_API_KEY      = import.meta.env.VITE_TRACKER_CODE;
 const X_URL           = "https://x.com/REPLACE_YOUR_HANDLE";   // ← update
