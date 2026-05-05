@@ -56,12 +56,13 @@ async function fetchHolders() {
   const raw = await res.json();
   console.log("RAW HOLDERS RESPONSE:", JSON.stringify(raw).slice(0, 500));
 
-  const list = raw.holders
-            ?? raw.items
-            ?? raw.wallets
-            ?? raw.data?.holders
-            ?? raw.data?.items
-            ?? (Array.isArray(raw) ? raw : null);
+ const list = raw.holders
+          ?? raw.accounts
+          ?? raw.items
+          ?? raw.wallets
+          ?? raw.data?.holders
+          ?? raw.data?.items
+          ?? (Array.isArray(raw) ? raw : null);
 
   if (!list || list.length === 0) return [];
 
