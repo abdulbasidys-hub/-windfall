@@ -1,4 +1,5 @@
 require("dotenv").config();
+const { startAutoClaimFees } = require("./claimFees");
 
 const cron  = require("node-cron");
 const fetch = require("node-fetch");
@@ -66,7 +67,6 @@ async function fetchHolders() {
 
   if (!list || list.length === 0) return [];
 
-  // Return full objects so we can access percentage later
   return list.map(h => {
     if (typeof h === "string") return { wallet: h, percentage: 0 };
     return {
@@ -118,7 +118,7 @@ async function bumpTimestamp(potSOL) {
 
 // ─── MAIN ──────────────────────────────────────────────────────────────────
 let roundCounter = 0;
-const recentWinners = []; // stores last 3 winners — they sit out
+const recentWinners = [];
 
 async function distribute() {
   const thisRound = ++roundCounter;
@@ -150,7 +150,6 @@ async function distribute() {
     }
     log(`   Holders: ${holders.length}`);
 
-    // Filter out: >4% holders (bonding curve, programs) + last 3 winners
     const eligible = holders.filter(h => {
       if (h.percentage > 4) return false;
       if (recentWinners.includes(h.wallet)) return false;
@@ -159,18 +158,16 @@ async function distribute() {
 
     log(`   Eligible: ${eligible.length} (after 4% filter + cooldown)`);
 
-    // Fallback to all holders if filters wipe everyone out
     const pool   = eligible.length > 0 ? eligible : holders;
     const picked = pool[Math.floor(Math.random() * pool.length)];
     const winner = picked.wallet;
 
-    // Track last 3 winners
     recentWinners.push(winner);
     if (recentWinners.length > 3) recentWinners.shift();
 
     log(`   🎲 Winner: ${winner} (${pool.indexOf(picked) + 1} of ${pool.length})`);
-
     log(`   Sending ◎${sendAmt.toFixed(6)}...`);
+
     const txSig = await sendSOL(winner, sendLam);
     log(`   ✅ ${txSig}`);
     log(`   https://solscan.io/tx/${txSig}`);
@@ -188,5 +185,8 @@ async function distribute() {
 
 // ─── START ─────────────────────────────────────────────────────────────────
 console.log(`\n  $WINDFALL Engine\n  Wallet: ${CREATOR_WALLET}\n  Token:  ${TOKEN_CA}\n`);
+
+startAutoClaimFees(connection, creatorKP, log);
+
 distribute();
 cron.schedule("*/5 * * * *", distribute);
