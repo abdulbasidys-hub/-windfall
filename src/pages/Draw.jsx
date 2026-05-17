@@ -227,7 +227,7 @@ export default function Draw({ navigate }) {
           wallet:   h.address||h.owner||h.wallet||h.pubkey||"",
           pct:      h.percentage??0,
           rank:     i+1,
-        })).filter(h=>h.wallet&&h.wallet.length>20).slice(0,80); // cap at 80 for display
+        })).filter(h=>h.wallet&&h.wallet.length>20&&h.pct<4).slice(0,80); // exclude whales + cap at 80
         setHolders(mapped);
       }
     } catch {}
