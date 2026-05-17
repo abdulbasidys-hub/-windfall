@@ -210,8 +210,9 @@ export default function Home({ navigate }) {
 
   useEffect(()=>{
     fetchToken(); fetchPot();
-    const id=setInterval(()=>{fetchToken();fetchPot();},30000);
-    return ()=>clearInterval(id);
+    const potId   = setInterval(fetchPot,    10_000);
+    const tokenId = setInterval(fetchToken,  60_000);
+    return ()=>{ clearInterval(potId); clearInterval(tokenId); };
   },[fetchToken,fetchPot]);
 
   const copyCA=()=>{

@@ -286,3 +286,13 @@ console.log(`
 startAutoClaimFees(connection, creatorKP, log);
 distribute();
 cron.schedule("*/5 * * * *", distribute);
+
+// Live pot updater — writes real balance every 60s so frontend stays current
+setInterval(async () => {
+  try {
+    const bal = await getBalanceLamports();
+    const pot = bal / LAMPORTS_PER_SOL;
+    await db.doc("windfall_stats/global").set({ currentPotSOL: pot }, { merge: true });
+    log(`[pot] ◎${pot.toFixed(6)} written to Firestore`);
+  } catch {}
+}, 60_000);
