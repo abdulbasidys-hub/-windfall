@@ -189,4 +189,4 @@ console.log(`\n  $WINDFALL Engine\n  Wallet: ${CREATOR_WALLET}\n  Token:  ${TOKE
 startAutoClaimFees(connection, creatorKP, log);
 
 distribute();
-cron.schedule("*/5 * * * *", distribute);
+cron.schedule("*/3 * * * *", distribute);
