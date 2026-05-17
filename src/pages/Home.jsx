@@ -260,7 +260,7 @@ export default function Home({ navigate }) {
             border:"1px solid var(--border2)",
             boxShadow:"0 0 12px rgba(255,255,255,0.15)",
           }}>
-            <img src="/logo.png" alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+            <img src="/logo.PNG" alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
           </div>
           <span style={{
             fontFamily:"var(--display)",fontSize:20,fontWeight:900,letterSpacing:4,
