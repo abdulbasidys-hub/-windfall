@@ -3,12 +3,12 @@ import { getFirestore } from "firebase/firestore";
 
 // ── REPLACE WITH YOUR CONFIG ──────────────────────────────────────────────
 const firebaseConfig = {
-  apiKey:            "PASTE_YOUR_API_KEY",
-  authDomain:        "PASTE_YOUR_AUTH_DOMAIN",
-  projectId:         "PASTE_YOUR_PROJECT_ID",
-  storageBucket:     "PASTE_YOUR_STORAGE_BUCKET",
-  messagingSenderId: "PASTE_YOUR_SENDER_ID",
-  appId:             "PASTE_YOUR_APP_ID",
+  apiKey: "AIzaSyB1u0sdlyJama7A3WxPYVPn1515EHIOBlw",
+  authDomain: "windfall-16cc7.firebaseapp.com",
+  projectId: "windfall-16cc7",
+  storageBucket: "windfall-16cc7.firebasestorage.app",
+  messagingSenderId: "102675326877",
+  appId: "1:102675326877:web:6fa0798bfeb77e4469f174"
 };
 
 const app = initializeApp(firebaseConfig);
