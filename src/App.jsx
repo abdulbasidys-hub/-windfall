@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import Home from "./pages/Home";
-import Draw from "./pages/Draw";
+import Home          from "./pages/Home";
+import Draw          from "./pages/Draw";
+import FloatingTimer from "./FloatingTimer";
 
 function useRouter() {
   const get = () => {
@@ -26,6 +27,7 @@ export default function App() {
     <>
       {page === "home" && <Home navigate={navigate}/>}
       {page === "draw" && <Draw navigate={navigate}/>}
+      <FloatingTimer />
     </>
   );
 }
