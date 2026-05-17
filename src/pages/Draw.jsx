@@ -123,7 +123,7 @@ function HolderChip({ wallet, isHighlighted, isWinner, isEliminated, rank, animD
       )}
 
       {isWinner&&(
-        <span style={{fontFamily:"var(--sans)",fontSize:9,fontWeight:700,letterSpacing:2,color:"var(--gold3)"}}>WIN</span>
+        <span style={{fontFamily:"var(--body)",fontSize:9,fontWeight:700,letterSpacing:2,color:"var(--gold3)"}}>WIN</span>
       )}
     </div>
   );
@@ -171,14 +171,14 @@ function StatusBanner({ phase, winner, amount, countdown }) {
           flexShrink:0,
         }}/>
         <div>
-          <div style={{fontFamily:"var(--sans)",fontSize:10,letterSpacing:4,color:c.color,fontWeight:700}}>{c.text}</div>
-          <div style={{fontFamily:"var(--serif)",fontSize:13,fontStyle:"italic",color:"var(--muted)",marginTop:3}}>{c.sub}</div>
+          <div style={{fontFamily:"var(--body)",fontSize:10,letterSpacing:4,color:c.color,fontWeight:700}}>{c.text}</div>
+          <div style={{fontFamily:"var(--display)",fontSize:13,color:"var(--muted)",marginTop:3}}>{c.sub}</div>
         </div>
       </div>
 
       {phase==="winner"&&winner&&(
         <a href={`https://solscan.io/account/${winner}`} target="_blank" rel="noreferrer"
-          style={{fontFamily:"var(--sans)",fontSize:9,letterSpacing:3,color:"var(--gold2)",
+          style={{fontFamily:"var(--body)",fontSize:9,letterSpacing:3,color:"var(--gold2)",
             border:"1px solid var(--border2)",borderRadius:2,padding:"6px 14px",
             transition:"all 0.2s"}}
           onMouseEnter={e=>e.currentTarget.style.borderColor="var(--gold2)"}
@@ -355,7 +355,7 @@ export default function Draw({ navigate }) {
         position:"fixed",top:0,left:0,right:0,zIndex:300,
         height:64,display:"flex",alignItems:"center",justifyContent:"space-between",
         padding:"0 28px",
-        background:"rgba(4,8,15,0.95)",
+        background:"rgba(13,63,130,0.92)",
         borderBottom:"1px solid var(--border)",
         backdropFilter:"blur(20px)",
       }}>
@@ -369,7 +369,7 @@ export default function Draw({ navigate }) {
           <div style={{width:32,height:32,borderRadius:5,overflow:"hidden",border:"1px solid var(--border2)"}}>
             <img src="/logo.png" alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
           </div>
-          <span style={{fontFamily:"var(--sans)",fontSize:14,fontWeight:900,letterSpacing:3,
+          <span style={{fontFamily:"var(--body)",fontSize:14,fontWeight:900,letterSpacing:3,
             background:"linear-gradient(135deg,var(--gold3),var(--gold2))",
             WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>$WINDFALL</span>
         </button>
@@ -391,14 +391,14 @@ export default function Draw({ navigate }) {
 
         {/* Page title */}
         <div style={{marginBottom:24,paddingTop:16}}>
-          <div style={{fontFamily:"var(--sans)",fontSize:9,letterSpacing:6,color:"var(--gold2)",marginBottom:8,fontWeight:700}}>
+          <div style={{fontFamily:"var(--body)",fontSize:9,letterSpacing:6,color:"var(--gold2)",marginBottom:8,fontWeight:700}}>
             LIVE TRANSPARENCY
           </div>
           <h1 style={{
-            fontFamily:"var(--serif)",fontSize:isMobile?"clamp(32px,10vw,48px)":"clamp(40px,5vw,60px)",
-            fontWeight:300,fontStyle:"italic",color:"var(--cream)",lineHeight:1.1,marginBottom:8,
+            fontFamily:"var(--display)",fontSize:isMobile?"clamp(32px,10vw,48px)":"clamp(40px,5vw,60px)",
+            fontWeight:300,color:"var(--cream)",lineHeight:1.1,marginBottom:8,
           }}>The Draw Room</h1>
-          <p style={{fontFamily:"var(--serif)",fontSize:14,fontStyle:"italic",color:"var(--muted)",lineHeight:1.7}}>
+          <p style={{fontFamily:"var(--display)",fontSize:14,color:"var(--muted)",lineHeight:1.7}}>
             Every holder in the pool. Every draw visible. Completely on-chain. Nothing hidden.
           </p>
         </div>
@@ -416,7 +416,7 @@ export default function Draw({ navigate }) {
             <div className="card" style={{padding:"14px 20px",marginBottom:12}}>
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:10}}>
                 <div style={{display:"flex",alignItems:"center",gap:12}}>
-                  <div style={{fontFamily:"var(--sans)",fontSize:9,letterSpacing:4,color:"var(--muted)",fontWeight:700}}>
+                  <div style={{fontFamily:"var(--body)",fontSize:9,letterSpacing:4,color:"var(--muted)",fontWeight:700}}>
                     ELIGIBLE HOLDER POOL
                   </div>
                   <div style={{
@@ -428,7 +428,7 @@ export default function Draw({ navigate }) {
                 <button onClick={fetchHolders} disabled={loadingHolders} style={{
                   background:"none",border:"1px solid var(--border)",borderRadius:3,
                   cursor:loadingHolders?"not-allowed":"pointer",
-                  fontFamily:"var(--sans)",fontSize:9,letterSpacing:2,
+                  fontFamily:"var(--body)",fontSize:9,letterSpacing:2,
                   color:"var(--muted)",padding:"5px 12px",transition:"all 0.2s",
                 }}
                   onMouseEnter={e=>{if(!loadingHolders)e.currentTarget.style.borderColor="var(--border2)";}}
@@ -437,7 +437,7 @@ export default function Draw({ navigate }) {
               </div>
 
               {/* Mini description */}
-              <p style={{fontFamily:"var(--serif)",fontSize:12,fontStyle:"italic",color:"var(--dim)",marginTop:10,lineHeight:1.6}}>
+              <p style={{fontFamily:"var(--display)",fontSize:12,color:"var(--dim)",marginTop:10,lineHeight:1.6}}>
                 All current $WINDFALL holders shown below. When the 5-minute timer expires, the engine picks one completely at random. You can watch it happen here in real time.
               </p>
             </div>
@@ -446,7 +446,7 @@ export default function Draw({ navigate }) {
             {holders.length===0?(
               <div className="card" style={{padding:"60px 24px",textAlign:"center"}}>
                 <div style={{fontSize:40,marginBottom:16,opacity:0.3}}>🌬️</div>
-                <div style={{fontFamily:"var(--serif)",fontSize:16,fontStyle:"italic",color:"var(--muted)"}}>
+                <div style={{fontFamily:"var(--display)",fontSize:16,color:"var(--muted)"}}>
                   {loadingHolders?"Loading holder pool...":"No holders found — refresh to try again"}
                 </div>
               </div>
@@ -487,18 +487,18 @@ export default function Draw({ navigate }) {
                 <div style={{position:"absolute",bottom:0,left:0,right:0,height:2,
                   background:"linear-gradient(90deg,transparent,var(--gold2),transparent)"}}/>
                 <div style={{fontSize:40,marginBottom:8}}>🏆</div>
-                <div style={{fontFamily:"var(--sans)",fontSize:9,letterSpacing:6,color:"var(--gold2)",marginBottom:12,fontWeight:700}}>
+                <div style={{fontFamily:"var(--body)",fontSize:9,letterSpacing:6,color:"var(--gold2)",marginBottom:12,fontWeight:700}}>
                   WINDFALL DISTRIBUTED
                 </div>
                 <div style={{fontFamily:"var(--mono)",fontSize:isMobile?14:18,color:"var(--gold3)",marginBottom:8,fontWeight:500}}>
                   {winner}
                 </div>
-                <div style={{fontFamily:"var(--serif)",fontSize:isMobile?24:36,fontStyle:"italic",color:"var(--gold2)",fontWeight:700}}>
+                <div style={{fontFamily:"var(--display)",fontSize:isMobile?24:36,color:"var(--gold2)",fontWeight:700}}>
                   +◎ {fmtSOL(winAmount)}
                 </div>
                 <a href={`https://solscan.io/account/${winner}`} target="_blank" rel="noreferrer" style={{
                   display:"inline-block",marginTop:16,
-                  fontFamily:"var(--sans)",fontSize:10,letterSpacing:3,color:"var(--gold2)",
+                  fontFamily:"var(--body)",fontSize:10,letterSpacing:3,color:"var(--gold2)",
                   border:"1px solid var(--border2)",borderRadius:2,padding:"8px 20px",
                 }}>VIEW WALLET ON SOLSCAN →</a>
               </div>
@@ -510,7 +510,7 @@ export default function Draw({ navigate }) {
 
             {/* Live stats */}
             <div className="card ornate" style={{padding:"22px 20px"}}>
-              <div style={{fontFamily:"var(--sans)",fontSize:9,letterSpacing:5,color:"var(--muted)",marginBottom:18,fontWeight:700}}>
+              <div style={{fontFamily:"var(--body)",fontSize:9,letterSpacing:5,color:"var(--muted)",marginBottom:18,fontWeight:700}}>
                 DRAW STATISTICS
               </div>
               {[
@@ -524,7 +524,7 @@ export default function Draw({ navigate }) {
                   display:"flex",justifyContent:"space-between",alignItems:"center",
                   padding:"10px 0",borderBottom:"1px solid var(--border)",
                 }}>
-                  <span style={{fontFamily:"var(--sans)",fontSize:9,letterSpacing:2,color:"var(--muted)",fontWeight:600}}>{s.label}</span>
+                  <span style={{fontFamily:"var(--body)",fontSize:9,letterSpacing:2,color:"var(--muted)",fontWeight:600}}>{s.label}</span>
                   <span style={{fontFamily:"var(--mono)",fontSize:11,color:"var(--cream)"}}>{s.value}</span>
                 </div>
               ))}
@@ -532,7 +532,7 @@ export default function Draw({ navigate }) {
 
             {/* How the draw works */}
             <div className="card" style={{padding:"22px 20px"}}>
-              <div style={{fontFamily:"var(--sans)",fontSize:9,letterSpacing:5,color:"var(--muted)",marginBottom:16,fontWeight:700}}>
+              <div style={{fontFamily:"var(--body)",fontSize:9,letterSpacing:5,color:"var(--muted)",marginBottom:16,fontWeight:700}}>
                 HOW SELECTION WORKS
               </div>
               {[
@@ -549,7 +549,7 @@ export default function Draw({ navigate }) {
                     background:"rgba(201,146,42,0.1)",border:"1px solid var(--border2)",
                     fontFamily:"var(--mono)",fontSize:9,color:"var(--gold2)",
                   }}>{n}</div>
-                  <div style={{fontFamily:"var(--serif)",fontSize:12,fontStyle:"italic",color:"var(--muted)",lineHeight:1.6,paddingTop:2}}>
+                  <div style={{fontFamily:"var(--display)",fontSize:12,color:"var(--muted)",lineHeight:1.6,paddingTop:2}}>
                     {text}
                   </div>
                 </div>
@@ -558,11 +558,11 @@ export default function Draw({ navigate }) {
 
             {/* Recent winners */}
             <div className="card" style={{padding:"22px 20px"}}>
-              <div style={{fontFamily:"var(--sans)",fontSize:9,letterSpacing:5,color:"var(--muted)",marginBottom:16,fontWeight:700}}>
+              <div style={{fontFamily:"var(--body)",fontSize:9,letterSpacing:5,color:"var(--muted)",marginBottom:16,fontWeight:700}}>
                 RECENT WINDFALLS
               </div>
               {recentWins.length===0?(
-                <div style={{fontFamily:"var(--serif)",fontSize:13,fontStyle:"italic",color:"var(--dim)",textAlign:"center",padding:"20px 0"}}>
+                <div style={{fontFamily:"var(--display)",fontSize:13,color:"var(--dim)",textAlign:"center",padding:"20px 0"}}>
                   No draws yet
                 </div>
               ):recentWins.map((w,i)=>(
@@ -578,7 +578,7 @@ export default function Draw({ navigate }) {
                       onMouseEnter={e=>e.currentTarget.style.color="var(--gold2)"}
                       onMouseLeave={e=>e.currentTarget.style.color=i===0?"var(--gold2)":"var(--muted)"}
                     >{short(w.winner)}</a>
-                    <div style={{fontFamily:"var(--sans)",fontSize:10,color:"var(--dim)",marginTop:2}}>
+                    <div style={{fontFamily:"var(--body)",fontSize:10,color:"var(--dim)",marginTop:2}}>
                       {w.timestamp?timeAgo(w.timestamp.toMillis()):""}
                     </div>
                   </div>
