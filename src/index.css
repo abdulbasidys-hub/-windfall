@@ -1,0 +1,214 @@
+/* Cormorant Garamond — old money serif. Montserrat — clean authority. DM Mono — data. */
+
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+
+:root {
+  /* ── Navy velvet — deep, not flat ── */
+  --ink:        #04080F;
+  --navy:       #060D1C;
+  --navy2:      #0A1428;
+  --navy3:      #0F1D38;
+  --navy4:      #162240;
+
+  /* ── Gold spectrum ── */
+  --gold:       #C9922A;
+  --gold2:      #E0AF45;
+  --gold3:      #F5CE6E;
+  --gold4:      #FDE9A8;
+  --gold-dim:   rgba(201,146,42,0.12);
+  --gold-glow:  rgba(201,146,42,0.35);
+
+  /* ── Text ── */
+  --cream:      #F0E8D5;
+  --cream2:     #C8B99A;
+  --muted:      rgba(240,232,213,0.45);
+  --dim:        rgba(240,232,213,0.18);
+
+  /* ── Borders ── */
+  --border:     rgba(201,146,42,0.14);
+  --border2:    rgba(201,146,42,0.3);
+  --border3:    rgba(201,146,42,0.55);
+
+  /* ── Fonts ── */
+  --serif:   'Cormorant Garamond', Georgia, serif;
+  --sans:    'Montserrat', sans-serif;
+  --mono:    'DM Mono', monospace;
+
+  --max-w: 1100px;
+}
+
+html { scroll-behavior:smooth; }
+html, body, #root {
+  min-height:100%;
+  background:var(--ink);
+  color:var(--cream);
+  font-family:var(--sans);
+  overflow-x:hidden;
+}
+
+/* ── Multi-layer atmospheric background ── */
+body::before {
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:
+    /* Gold light shaft from top center — like sunburst in logo */
+    radial-gradient(ellipse 60% 50% at 50% -5%, rgba(201,146,42,0.12) 0%, transparent 55%),
+    /* Warm left ambient */
+    radial-gradient(ellipse 40% 60% at 0% 30%, rgba(201,146,42,0.05) 0%, transparent 50%),
+    /* Cool deep navy right */
+    radial-gradient(ellipse 50% 80% at 100% 70%, rgba(6,13,28,0.8) 0%, transparent 60%),
+    /* Bottom vignette */
+    radial-gradient(ellipse 100% 40% at 50% 100%, rgba(4,8,15,0.9) 0%, transparent 60%);
+}
+
+/* ── Fine gold linen texture ── */
+body::after {
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background-image:
+    repeating-linear-gradient(
+      -45deg,
+      transparent 0px, transparent 3px,
+      rgba(201,146,42,0.018) 3px, rgba(201,146,42,0.018) 4px
+    ),
+    repeating-linear-gradient(
+      45deg,
+      transparent 0px, transparent 3px,
+      rgba(201,146,42,0.01) 3px, rgba(201,146,42,0.01) 4px
+    );
+}
+
+/* ── Scanline depth overlay ── */
+.scanlines::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px
+  );
+  z-index:1;
+}
+
+/* ── Animations ── */
+@keyframes float-coin {
+  0%   { transform:translateY(108vh) rotate(0deg);   opacity:0; }
+  5%   { opacity:0.7; }
+  92%  { opacity:0.2; }
+  100% { transform:translateY(-10vh) rotate(540deg); opacity:0; }
+}
+@keyframes shimmer-text {
+  0%   { background-position:-300% center; }
+  100% { background-position:300% center; }
+}
+@keyframes glow-pulse {
+  0%,100% { box-shadow:0 0 20px rgba(201,146,42,0.1), 0 0 60px rgba(201,146,42,0.03); }
+  50%      { box-shadow:0 0 40px rgba(201,146,42,0.28), 0 0 100px rgba(201,146,42,0.08); }
+}
+@keyframes border-shimmer {
+  0%   { border-color:rgba(201,146,42,0.2); }
+  50%  { border-color:rgba(201,146,42,0.5); }
+  100% { border-color:rgba(201,146,42,0.2); }
+}
+@keyframes fade-rise {
+  from { opacity:0; transform:translateY(28px); }
+  to   { opacity:1; transform:translateY(0);    }
+}
+@keyframes slide-in-winner {
+  from { opacity:0; transform:translateX(-12px); }
+  to   { opacity:1; transform:translateX(0); }
+}
+@keyframes ring-fill {
+  from { stroke-dashoffset:700; }
+  to   { stroke-dashoffset:var(--target-offset); }
+}
+@keyframes winner-explode {
+  0%   { transform:scale(1);     box-shadow:0 0 0 0 rgba(201,146,42,0.6); }
+  40%  { transform:scale(1.06);  box-shadow:0 0 0 40px rgba(201,146,42,0); }
+  100% { transform:scale(1);     box-shadow:0 0 0 0 rgba(201,146,42,0); }
+}
+@keyframes confetti-drop {
+  0%   { transform:translateY(-20px) rotate(0deg);   opacity:1; }
+  100% { transform:translateY(120px) rotate(720deg); opacity:0; }
+}
+@keyframes spotlight-sweep {
+  0%,100% { opacity:0.6; transform:scale(1); }
+  50%      { opacity:1;   transform:scale(1.04); }
+}
+@keyframes ticker {
+  0%   { transform:translateX(0); }
+  100% { transform:translateX(-50%); }
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+@keyframes draw-spin {
+  0%   { transform:rotate(0deg); }
+  100% { transform:rotate(360deg); }
+}
+
+/* ── Utility classes ── */
+.fade-rise  { animation:fade-rise .7s ease both; }
+.gold-text  {
+  background: linear-gradient(135deg, var(--gold3) 0%, var(--gold2) 40%, var(--gold) 70%, var(--gold4) 100%);
+  background-size:200%;
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  animation:shimmer-text 5s linear infinite;
+}
+.gold-border { border:1px solid var(--border2); animation:border-shimmer 3s ease infinite; }
+
+/* ── Cards ── */
+.card {
+  background:rgba(10,20,40,0.7);
+  border:1px solid var(--border);
+  border-radius:4px;
+  position:relative; overflow:hidden;
+  backdrop-filter:blur(12px);
+}
+.card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg, transparent, var(--gold2), transparent);
+  opacity:0.4;
+}
+
+/* ── Corner ornaments mixin ── */
+.ornate::after, .ornate::before {
+  content:''; position:absolute;
+  width:16px; height:16px;
+  border-color:rgba(201,146,42,0.3);
+  border-style:solid;
+}
+.ornate::before { top:12px; left:12px; border-width:1px 0 0 1px; }
+.ornate::after  { bottom:12px; right:12px; border-width:0 1px 1px 0; }
+
+/* ── Buttons ── */
+.btn-gold {
+  font-family:var(--sans);
+  font-size:11px; font-weight:700; letter-spacing:3px;
+  padding:13px 32px;
+  background:linear-gradient(135deg, #8B6010, var(--gold), var(--gold2), var(--gold));
+  background-size:200%;
+  color:#06080C; border:none; border-radius:2px; cursor:pointer;
+  box-shadow:0 3px 20px rgba(201,146,42,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+  transition:all 0.2s ease;
+  text-transform:uppercase;
+}
+.btn-gold:hover {
+  background-position:right center;
+  box-shadow:0 5px 32px rgba(201,146,42,0.55);
+  transform:translateY(-1px);
+}
+.btn-outline {
+  font-family:var(--sans); font-size:11px; font-weight:600; letter-spacing:3px;
+  padding:12px 28px;
+  background:transparent; border:1px solid var(--border2);
+  color:var(--gold2); border-radius:2px; cursor:pointer;
+  transition:all 0.2s ease; text-transform:uppercase;
+}
+.btn-outline:hover { background:var(--gold-dim); border-color:var(--border3); }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width:3px; }
+::-webkit-scrollbar-thumb { background:var(--gold-dim); border-radius:2px; }
+
+/* ── Responsive ── */
+@media(max-width:768px) {
+  .hide-mobile  { display:none!important; }
+  .stack-mobile { flex-direction:column!important; }
+  .grid-mobile-1 { grid-template-columns:1fr!important; }
+}
+@media(min-width:769px) { .hide-desktop { display:none!important; } }
