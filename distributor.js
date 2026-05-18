@@ -27,6 +27,7 @@ const MIN_DIST_SOL    = parseFloat(process.env.MIN_DISTRIBUTE_SOL || "0.005");
 const GAS_RESERVE_SOL = parseFloat(process.env.GAS_RESERVE_SOL   || "0.01");
 const MAX_HOLDER_PCT  = parseFloat(process.env.MAX_HOLDER_PCT     || "4");
 const COOLDOWN_ROUNDS = 3; // winner can't win again for 3 rounds
+const MIN_TOKENS      = parseInt(process.env.MIN_TOKENS || "200000"); // min tokens to qualify
 
 // ── VALIDATE ───────────────────────────────────────────────────────────────
 ["CREATOR_PRIVATE_KEY","FIREBASE_SERVICE_ACCOUNT_JSON","CREATOR_WALLET","TOKEN_CA","SOLANATRACKER_API_KEY"]
@@ -81,6 +82,7 @@ async function fetchAllHolders() {
         return {
           wallet:     h.address || h.owner || h.wallet || h.pubkey || null,
           percentage: h.percentage ?? h.pct ?? 0,
+          amount:     h.amount ?? h.balance ?? h.tokenAmount ?? h.uiAmount ?? 0,
         };
       }).filter(h => h.wallet && isValidSolanaAddress(h.wallet));
 
@@ -220,10 +222,11 @@ async function distribute() {
       if (h.wallet === CREATOR_WALLET) return false;     // exclude creator
       if (h.percentage > MAX_HOLDER_PCT) return false;   // exclude whales
       if (recentWinners.includes(h.wallet)) return false; // cooldown
+      if ((h.amount || 0) < MIN_TOKENS) return false;    // min token holding
       return true;
     });
 
-    log(`   Eligible: ${eligible.length} (excluded: creator, >${MAX_HOLDER_PCT}% holders, last ${COOLDOWN_ROUNDS} winners)`);
+    log(`   Eligible: ${eligible.length} (excluded: creator, >${MAX_HOLDER_PCT}% holders, <${MIN_TOKENS.toLocaleString()} tokens, last ${COOLDOWN_ROUNDS} winners)`);
 
     // Fallback to all holders (minus creator) if everyone is filtered
     const pool = eligible.length > 0
