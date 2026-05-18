@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { doc, onSnapshot, collection, query, orderBy, limit } from "firebase/firestore";
 import { db } from "../firebase";
 
-const TOKEN_CA       = "GVkQKdubVk57GXoneqHZ3RtVYjUAgTst9W8C2w2ppump";
+const TOKEN_CA       = "Nil";
 const CREATOR_WALLET = "DSf8dVXjLbnCmEHbNfEATd37486Pe5m8o1nHNQZGgEd1";
 const ST_API_KEY     = import.meta.env.VITE_TRACKER_CODE;
 const X_URL          = "https://x.com/windfallcoin";
