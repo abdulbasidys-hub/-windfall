@@ -3,6 +3,7 @@ import { doc, onSnapshot, collection, query, orderBy, limit } from "firebase/fir
 import { db } from "../firebase";
 
 const TOKEN_CA   = "13SVgpzFcZf8vF6Tg1QV7vec82FdJrf4Kg2VEX4xpump";
+const MIN_TOKENS = 200_000; // minimum tokens to appear in draw pool
 const ST_API_KEY = import.meta.env.VITE_TRACKER_CODE;
 const DIST_MS    = 5 * 60 * 1000;
 
@@ -227,7 +228,18 @@ export default function Draw({ navigate }) {
           wallet:   h.address||h.owner||h.wallet||h.pubkey||"",
           pct:      h.percentage??0,
           rank:     i+1,
-        })).filter(h=>h.wallet&&h.wallet.length>20&&h.pct<4).slice(0,80); // exclude whales + cap at 80
+          // amount can be UI amount or raw — normalise both
+          amount:   (() => {
+            const raw = h.amount??h.balance??h.tokenAmount??h.uiAmount??0;
+            // if raw looks like a large integer (>1e9), divide by 1e6 for decimals
+            return raw > 1_000_000_000 ? raw / 1_000_000 : raw;
+          })(),
+        })).filter(h =>
+          h.wallet &&
+          h.wallet.length > 20 &&
+          h.pct < 4 &&              // exclude whales
+          h.amount >= MIN_TOKENS    // exclude dust holders
+        ).slice(0,80);
         setHolders(mapped);
       }
     } catch {}
