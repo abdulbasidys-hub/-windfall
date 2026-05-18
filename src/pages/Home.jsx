@@ -3,7 +3,6 @@ import { doc, onSnapshot, collection, query, orderBy, limit } from "firebase/fir
 import { db } from "../firebase";
 
 const TOKEN_CA       = "uxDfdiZbMkNESavsHKb3cKpXSHawWQfS9rspVzbpump";
-const CREATOR_WALLET = "DSf8dVXjLbnCmEHbNfEATd37486Pe5m8o1nHNQZGgEd1";
 const ST_API_KEY     = import.meta.env.VITE_TRACKER_CODE;
 const X_URL          = "https://x.com/windfallcoin";
 const PUMP_URL       = `https://pump.fun/coin/${TOKEN_CA}`;
@@ -197,23 +196,11 @@ export default function Home({ navigate }) {
     } catch {}
   },[]);
 
-  const fetchPot = useCallback(async()=>{
-    try {
-      const res=await fetch("https://api.mainnet-beta.solana.com",{
-        method:"POST",headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({jsonrpc:"2.0",id:1,method:"getBalance",params:[CREATOR_WALLET]}),
-      });
-      const data=await res.json();
-      if (data?.result?.value!==undefined) setPotSOL(data.result.value/1e9);
-    } catch {}
-  },[]);
-
   useEffect(()=>{
-    fetchToken(); fetchPot();
-    const potId   = setInterval(fetchPot,    10_000);
-    const tokenId = setInterval(fetchToken,  60_000);
-    return ()=>{ clearInterval(potId); clearInterval(tokenId); };
-  },[fetchToken,fetchPot]);
+    fetchToken();
+    const tokenId = setInterval(fetchToken, 60_000);
+    return ()=>clearInterval(tokenId);
+  },[fetchToken]);
 
   const copyCA=()=>{
     navigator.clipboard.writeText(TOKEN_CA);
