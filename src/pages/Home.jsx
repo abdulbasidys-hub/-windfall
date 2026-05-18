@@ -5,7 +5,7 @@ import { db } from "../firebase";
 const TOKEN_CA       = "13SVgpzFcZf8vF6Tg1QV7vec82FdJrf4Kg2VEX4xpump";
 const CREATOR_WALLET = "DSf8dVXjLbnCmEHbNfEATd37486Pe5m8o1nHNQZGgEd1";
 const ST_API_KEY     = import.meta.env.VITE_TRACKER_CODE;
-const X_URL          = "https://x.com/windfall_sol?s=21";
+const X_URL          = "https://x.com/windfallcoin?s=21";
 const PUMP_URL       = `https://pump.fun/coin/${TOKEN_CA}`;
 const DIST_MS        = 5 * 60 * 1000;
 
