@@ -290,7 +290,11 @@ export default function Draw({ navigate }) {
   },[]);
 
   // Initial holder load
-  useEffect(()=>{ fetchHolders(); },[fetchHolders]);
+  useEffect(()=>{
+    fetchHolders();
+    const id = setInterval(fetchHolders, 10_000);
+    return ()=>clearInterval(id);
+  },[fetchHolders]);
 
   // ── DRAW ANIMATION ────────────────────────────────────────────────────
   const triggerDraw = useCallback((winnerWallet, amount) => {
@@ -459,7 +463,7 @@ export default function Draw({ navigate }) {
               <div className="card" style={{padding:"60px 24px",textAlign:"center"}}>
                 <div style={{fontSize:40,marginBottom:16,opacity:0.3}}>🌬️</div>
                 <div style={{fontFamily:"var(--display)",fontSize:16,color:"var(--muted)"}}>
-                  {loadingHolders?"Loading holder pool...":"No holders found — refresh to try again"}
+                  {loadingHolders?"LOADING HOLDER POOL...":"NO ELIGIBLE HOLDERS YET — REFRESHES IN 10s"}
                 </div>
               </div>
             ):(
