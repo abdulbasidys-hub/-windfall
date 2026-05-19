@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { doc, onSnapshot, collection, query, orderBy, limit } from "firebase/firestore";
 import { db } from "../firebase";
 
-const TOKEN_CA   = "13SVgpzFcZf8vF6Tg1QV7vec82FdJrf4Kg2VEX4xpump";
+const TOKEN_CA   = "uxDfdiZbMkNESavsHKb3cKpXSHawWQfS9rspVzbpump";
 const MIN_TOKENS = 200_000; // minimum tokens to appear in draw pool
 const ST_API_KEY = import.meta.env.VITE_TRACKER_CODE;
 const DIST_MS    = 5 * 60 * 1000;
