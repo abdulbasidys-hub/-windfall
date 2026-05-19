@@ -228,17 +228,15 @@ async function distribute() {
 
     log(`   Eligible: ${eligible.length} (excluded: creator, >${MAX_HOLDER_PCT}% holders, <${MIN_TOKENS.toLocaleString()} tokens, last ${COOLDOWN_ROUNDS} winners)`);
 
-    // Fallback to all holders (minus creator) if everyone is filtered
-    const pool = eligible.length > 0
-      ? eligible
-      : holders.filter(h => h.wallet !== CREATOR_WALLET);
-
-    if (pool.length === 0) {
-      log("   ⚠️  Empty pool after filtering");
+    // No fallback — if nobody qualifies, skip this round
+    if (eligible.length === 0) {
+      log("   ⏸️  No eligible holders — skipping round");
       await bumpTimestamp(balSOL);
       isRunning = false;
       return;
     }
+
+    const pool = eligible;
 
     // 4. Pick random winner
     const picked = pool[Math.floor(Math.random() * pool.length)];
